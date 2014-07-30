@@ -23,6 +23,8 @@ function! HiInterestingWord(n, is_visual) " {{{
         " Save our location.
         normal! mz
 
+        let old_z = @z
+
         if a:is_visual
             " Yank the last selection into the z register.
             normal! gv"zy
@@ -45,6 +47,8 @@ function! HiInterestingWord(n, is_visual) " {{{
 
         " Move back to our original location.
         normal! `z
+
+        let @z = old_z
     endif
 endfunction " }}}
 
