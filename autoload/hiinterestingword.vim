@@ -52,6 +52,11 @@ function! hiinterestingword#HiInterestingWord(n, is_visual) " {{{
     " Move back to our original location.
     call winrestview(view)
 
+    if a:is_visual
+        " Re-select and esc to restore cursor position. Esc is required to
+        " clear visual selection (exec is required to use Esc).
+        exec "normal! gv\<Esc>"
+    endif
 endfunction " }}}
 
 " Default Highlights {{{
