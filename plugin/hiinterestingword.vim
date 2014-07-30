@@ -45,6 +45,7 @@ function! HiInterestingWord(n, is_visual) " {{{
     let pat = '\V\<' . escape(@z, '\') . '\>'
 
     " Actually match the words.
+    call SetupHighlights()
     call matchadd("InterestingWord" . a:n, pat, 1, mid)
 
     " Move back to our original location.
@@ -68,11 +69,21 @@ endfor
 " }}}
 " Default Highlights {{{
 
-hi def InterestingWord1 guifg=#000000 ctermfg=16 guibg=#ffa724 ctermbg=214
-hi def InterestingWord2 guifg=#000000 ctermfg=16 guibg=#aeee00 ctermbg=154
-hi def InterestingWord3 guifg=#000000 ctermfg=16 guibg=#8cffba ctermbg=121
-hi def InterestingWord4 guifg=#000000 ctermfg=16 guibg=#b88853 ctermbg=137
-hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
-hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
+function SetupHighlights()
+    " For some reason, I can't just have these highlights loaded on startup,
+    " so we call this function to define them on first use.
+
+    if exists("s:highlights_done")
+        return
+    endif
+    let s:highlights_done = 1
+
+    hi def InterestingWord1 guifg=#000000 ctermfg=16 guibg=#ffa724 ctermbg=214
+    hi def InterestingWord2 guifg=#000000 ctermfg=16 guibg=#aeee00 ctermbg=154
+    hi def InterestingWord3 guifg=#000000 ctermfg=16 guibg=#8cffba ctermbg=121
+    hi def InterestingWord4 guifg=#000000 ctermfg=16 guibg=#b88853 ctermbg=137
+    hi def InterestingWord5 guifg=#000000 ctermfg=16 guibg=#ff9eb8 ctermbg=211
+    hi def InterestingWord6 guifg=#000000 ctermfg=16 guibg=#ff2c4b ctermbg=195
+endfunction
 
 " }}}
