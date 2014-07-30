@@ -45,13 +45,9 @@ endfunction " }}}
 
 " Mappings {{{
 
-nnoremap <silent> <leader>0 :call HiInterestingWord(0)<cr>
-nnoremap <silent> <leader>1 :call HiInterestingWord(1)<cr>
-nnoremap <silent> <leader>2 :call HiInterestingWord(2)<cr>
-nnoremap <silent> <leader>3 :call HiInterestingWord(3)<cr>
-nnoremap <silent> <leader>4 :call HiInterestingWord(4)<cr>
-nnoremap <silent> <leader>5 :call HiInterestingWord(5)<cr>
-nnoremap <silent> <leader>6 :call HiInterestingWord(6)<cr>
+for i in range(0,6)
+    exec 'nnoremap <silent> <leader>'. i .' :call HiInterestingWord('. i .')<cr>'
+endfor
 
 " }}}
 " Default Highlights {{{
