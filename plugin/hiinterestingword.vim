@@ -21,7 +21,7 @@ function! HiInterestingWord(n, is_visual) " {{{
         endfor
     else
         " Save our location.
-        normal! mz
+        let view = winsaveview()
 
         let old_z = @z
 
@@ -46,7 +46,7 @@ function! HiInterestingWord(n, is_visual) " {{{
         call matchadd("InterestingWord" . a:n, pat, 1, mid)
 
         " Move back to our original location.
-        normal! `z
+        call winrestview(view)
 
         let @z = old_z
     endif
