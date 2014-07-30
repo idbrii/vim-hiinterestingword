@@ -8,33 +8,44 @@
 " Sometimes you're looking at a hairy piece of code and would like a certain
 " word or two to stand out temporarily.  You can search for it, but that only
 " gives you one color of highlighting.  Now you can use <leader>N where N is
-" a number from 1-6 to highlight the current word in a specific color.
+" a number from 1-6 to highlight the current word in a specific color.  Use
+" <leader>0 to clear the highlights.
 
 function! HiInterestingWord(n) " {{{
-    " Save our location.
-    normal! mz
+    let base_match_id = 86750
+    if a:n == 0
+        " Clear all interesting words
+        for n in range(1,6)
+            let mid = base_match_id + n
+            silent! call matchdelete(mid)
+        endfor
+    else
+        " Save our location.
+        normal! mz
 
-    " Yank the current word into the z register.
-    normal! "zyiw
+        " Yank the current word into the z register.
+        normal! "zyiw
 
-    " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
-    let mid = 86750 + a:n
+        " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
+        let mid = base_match_id + a:n
 
-    " Clear existing matches, but don't worry if they don't exist.
-    silent! call matchdelete(mid)
+        " Clear existing matches, but don't worry if they don't exist.
+        silent! call matchdelete(mid)
 
-    " Construct a literal pattern that has to match at boundaries.
-    let pat = '\V\<' . escape(@z, '\') . '\>'
+        " Construct a literal pattern that has to match at boundaries.
+        let pat = '\V\<' . escape(@z, '\') . '\>'
 
-    " Actually match the words.
-    call matchadd("InterestingWord" . a:n, pat, 1, mid)
+        " Actually match the words.
+        call matchadd("InterestingWord" . a:n, pat, 1, mid)
 
-    " Move back to our original location.
-    normal! `z
+        " Move back to our original location.
+        normal! `z
+    endif
 endfunction " }}}
 
 " Mappings {{{
 
+nnoremap <silent> <leader>0 :call HiInterestingWord(0)<cr>
 nnoremap <silent> <leader>1 :call HiInterestingWord(1)<cr>
 nnoremap <silent> <leader>2 :call HiInterestingWord(2)<cr>
 nnoremap <silent> <leader>3 :call HiInterestingWord(3)<cr>
