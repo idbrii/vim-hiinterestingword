@@ -11,7 +11,7 @@
 " a number from 1-6 to highlight the current word in a specific color.  Use
 " <leader>0 to clear the highlights.
 
-function! HiInterestingWord(n) " {{{
+function! HiInterestingWord(n, is_visual) " {{{
     let base_match_id = 86750
     if a:n == 0
         " Clear all interesting words
@@ -23,8 +23,13 @@ function! HiInterestingWord(n) " {{{
         " Save our location.
         normal! mz
 
-        " Yank the current word into the z register.
-        normal! "zyiw
+        if a:is_visual
+            " Yank the last selection into the z register.
+            normal! gv"zy
+        else
+            " Yank the current word into the z register.
+            normal! "zyiw
+        endif
 
         " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
         let mid = base_match_id + a:n
@@ -45,8 +50,14 @@ endfunction " }}}
 
 " Mappings {{{
 
-for i in range(0,6)
-    exec 'nnoremap <silent> <leader>'. i .' :call HiInterestingWord('. i .')<cr>'
+" Clear highlights
+nnoremap <silent> <leader>0 :call HiInterestingWord(0, 0)<cr>
+
+" Engage Highlights
+for i in range(1,6)
+    for mapmode in ['n', 'v']
+        exec mapmode .'noremap <silent> <leader>'. i .' :call HiInterestingWord('. i .', '. (mapmode == 'v').')<cr>'
+    endfor
 endfor
 
 " }}}
