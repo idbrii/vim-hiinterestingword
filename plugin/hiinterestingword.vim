@@ -1,6 +1,3 @@
-" Source:
-" https://bitbucket.org/sjl/dotfiles/src/e6f6389e598f33a32e75069d7b3cfafb597a4d82/vim/vimrc#cl-2291
-
 " Highlight Word {{{
 "
 " This mini-plugin provides a few mappings for highlighting words temporarily.
@@ -11,51 +8,55 @@
 " a number from 1-6 to highlight the current word in a specific color.  Use
 " <leader>0 to clear the highlights.
 
-function! HiInterestingWord(n, is_visual) " {{{
-    let base_match_id = 86750
-    if a:n == 0
-        " Clear all interesting words
-        for n in range(1,6)
-            let mid = base_match_id + n
-            silent! call matchdelete(mid)
-        endfor
-    else
-        " Save our location.
-        let view = winsaveview()
+" Source:
+" https://bitbucket.org/sjl/dotfiles/src/e6f6389e598f33a32e75069d7b3cfafb597a4d82/vim/vimrc#cl-2291
 
-        let old_z = @z
+let s:base_match_id = 86750
 
-        if a:is_visual
-            " Yank the last selection into the z register.
-            normal! gv"zy
-        else
-            " Yank the current word into the z register.
-            normal! "zyiw
-        endif
-
-        " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
-        let mid = base_match_id + a:n
-
-        " Clear existing matches, but don't worry if they don't exist.
+function! ByeInterestingWord() " {{{
+    " Clear all interesting words
+    for n in range(1,6)
+        let mid = s:base_match_id + n
         silent! call matchdelete(mid)
+    endfor
+endfunction
 
-        " Construct a literal pattern that has to match at boundaries.
-        let pat = '\V\<' . escape(@z, '\') . '\>'
+function! HiInterestingWord(n, is_visual) " {{{
+    " Save our location.
+    let view = winsaveview()
 
-        " Actually match the words.
-        call matchadd("InterestingWord" . a:n, pat, 1, mid)
+    let old_z = @z
 
-        " Move back to our original location.
-        call winrestview(view)
-
-        let @z = old_z
+    if a:is_visual
+        " Yank the last selection into the z register.
+        normal! gv"zy
+    else
+        " Yank the current word into the z register.
+        normal! "zyiw
     endif
+
+    " Calculate an arbitrary match ID.  Hopefully nothing else is using it.
+    let mid = s:base_match_id + a:n
+
+    " Clear existing matches, but don't worry if they don't exist.
+    silent! call matchdelete(mid)
+
+    " Construct a literal pattern that has to match at boundaries.
+    let pat = '\V\<' . escape(@z, '\') . '\>'
+
+    " Actually match the words.
+    call matchadd("InterestingWord" . a:n, pat, 1, mid)
+
+    " Move back to our original location.
+    call winrestview(view)
+
+    let @z = old_z
 endfunction " }}}
 
 " Mappings {{{
 
 " Clear highlights
-nnoremap <silent> <leader>0 :call HiInterestingWord(0, 0)<cr>
+nnoremap <silent> <leader>0 :call ByeInterestingWord()<cr>
 
 " Engage Highlights
 for i in range(1,6)
