@@ -42,7 +42,11 @@ function! hiinterestingword#HiInterestingWord(n, is_visual) " {{{
     silent! call matchdelete(mid)
 
     " Construct a literal pattern that has to match at boundaries.
-    let pat = '\V\<' . escape(@z, '\') . '\>'
+    let pat = escape(@z, '\')
+    if !a:is_visual
+        let pat = '\<' . pat . '\>'
+    endif
+    let pat = '\V' . pat
 
     " Actually match the words.
     call matchadd("InterestingWord" . a:n, pat, 1, mid)
