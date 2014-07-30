@@ -47,15 +47,16 @@ function! hiinterestingword#HiInterestingWord(n, is_visual) " {{{
     " Actually match the words.
     call matchadd("InterestingWord" . a:n, pat, 1, mid)
 
+    let @z = old_z
+
     " Move back to our original location.
     call winrestview(view)
 
-    let @z = old_z
 endfunction " }}}
 
 " Default Highlights {{{
 
-function hiinterestingword#SetupHighlights()
+function! hiinterestingword#SetupHighlights()
     hi def InterestingWord1 guifg=#000000 ctermfg=16 guibg=#ffa724 ctermbg=214
     hi def InterestingWord2 guifg=#000000 ctermfg=16 guibg=#aeee00 ctermbg=154
     hi def InterestingWord3 guifg=#000000 ctermfg=16 guibg=#8cffba ctermbg=121
